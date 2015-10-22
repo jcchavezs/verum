@@ -10,9 +10,9 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "verum"
   config.vm.network :private_network, ip: "192.168.33.11"
-  config.vm.synced_folder "../logs", "/var/www/logs", type: "nfs", create: true
-  config.vm.synced_folder "../htdocs", "/var/www/htdocs", type: "nfs", create: true
-  config.vm.synced_folder "../vhosts", "/var/www/vhosts", type: "nfs", create: true
+  config.vm.synced_folder "../www/logs", "/var/www/logs", type: "nfs", create: true
+  config.vm.synced_folder "../www/htdocs", "/var/www/htdocs", type: "nfs", create: true
+  config.vm.synced_folder "../www/vhosts", "/var/www/vhosts", type: "nfs", create: true
 
   # VM
   config.vm.provider :virtualbox do |vb|

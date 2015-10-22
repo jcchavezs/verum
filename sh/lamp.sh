@@ -6,31 +6,45 @@ updatedb
 
 apt-get install -y apache2
 
-if ! [ -L /var/www ]; then
-  rm -rf /var/www
-fi
-
 a2enmod rewrite > /dev/null 2>&1
-sed -i "s/IncludeOptional sites-enabled\/.conf/IncludeOptional \/var\/www\/vhosts\/*.conf/" /etc/apache2/apache2.conf
+sed -i "s/IncludeOptional sites-enabled\/*.conf/IncludeOptional \/var\/www\/vhosts\/*.conf/" /etc/apache2/apache2.conf
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
+echo "IncludeOptional /var/www/vhosts/*.conf" >> /etc/apache2/apache2.conf
 
 # Install MySQL
-apt-get install -y mysql-server php5-mysql
-mysql_install_db
-mysql_secure_installation
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password 123456'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password 123456'
+
+apt-get install mysql-server php5-mysql
+apt-get install -f
+#mysql_install_db
+#mysql_secure_installation
 
 apt-get install -y php5 libapache2-mod-php5 php5-mcrypt
 apt-get install -y php5-dev php5-cli php-pear
+
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+locale-gen en_US.UTF-8
+dpkg-reconfigure locales
+
 service apache2 restart
 
 # Solve the error "configure: error: sasl.h not found!"
 apt-get install -y libsasl2-dev
 
 # Install mongo
-pecl install mongo
+pecl install mongo > /dev/null 2>&1
 
-#mongo_location = "$(locate mongo.so)"
+MONGO_LOCATION="$(locate mongo.so)"
 
-echo  "extension=${mongo_location};" >> /etc/php5/apache2/php.ini
-echo  "extension=${mongo_location};" >> /etc/php5/cli/php.ini
+echo  "extension=${MONGO_LOCATION}" >> /etc/php5/apache2/php.ini
+echo  "extension=${MONGO_LOCATION}" >> /etc/php5/cli/php.ini
+
+# /usr/bin/mysqladmin -u root password 'new-password'
+# CREATE USER 'jcchavezs'@'localhost' IDENTIFIED BY 'mypass';
+# GRANT ALL PRIVILEGES ON * . * TO 'jcchavezs'@'localhost';
 
 # Check http://docs.mongodb.org/ecosystem/drivers/php/
