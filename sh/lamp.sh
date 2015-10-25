@@ -2,21 +2,20 @@
 
 #source ../variables.sh
 
-updatedb
-
 apt-get install -y apache2
 
 a2enmod rewrite > /dev/null 2>&1
 sed -i "s/IncludeOptional sites-enabled\/*.conf/IncludeOptional \/var\/www\/vhosts\/*.conf/" /etc/apache2/apache2.conf
-echo "ServerName localhost" >> /etc/apache2/apache2.conf
+echo "ServerName 192.168.33.11" >> /etc/apache2/apache2.conf
 echo "IncludeOptional /var/www/vhosts/*.conf" >> /etc/apache2/apache2.conf
 
 # Install MySQL
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password 123456'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password 123456'
 
-apt-get install mysql-server php5-mysql
+apt-get install -y mysql-server php5-mysql
 apt-get install -f
+
 #mysql_install_db
 #mysql_secure_installation
 
@@ -30,7 +29,13 @@ export LC_ALL=en_US.UTF-8
 locale-gen en_US.UTF-8
 dpkg-reconfigure locales
 
+# Install composer globally
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
 service apache2 restart
+
+updatedb
 
 # Solve the error "configure: error: sasl.h not found!"
 apt-get install -y libsasl2-dev
