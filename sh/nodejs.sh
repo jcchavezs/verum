@@ -10,3 +10,5 @@ apt-get install -y nodejs
 # Install 
 npm install -g bower
 npm install -g grunt-cli
+npm install less -gd
+npm install -g less-plugin-clean-css
