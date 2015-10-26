@@ -35,13 +35,13 @@ mv composer.phar /usr/local/bin/composer
 
 service apache2 restart
 
-updatedb
-
 # Solve the error "configure: error: sasl.h not found!"
 apt-get install -y libsasl2-dev
 
 # Install mongo
 pecl install mongo > /dev/null 2>&1
+
+updatedb
 
 MONGO_LOCATION="$(locate mongo.so)"
 
