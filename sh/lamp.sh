@@ -33,6 +33,27 @@ dpkg-reconfigure locales
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
+# Install xdebug
+
+apt-get install php5-xdebug
+
+updatedb
+
+XDEBUG_CONFIG_FILEPATH="/etc/php5/mods-available/xdebug.ini"
+
+XDEBUG_EXTENSION_FILEPATH="$(locate xdebug.so)"
+
+truncate -s 0 XDEBUG_CONFIG_FILEPATH
+
+echo "zend_extension=${XDEBUG_EXTENSION_FILEPATH}" >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.default_enable = 1' >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.idekey = "PHPSTORM"' >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.remote_enable = 1' >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.remote_autostart = 0' >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.remote_port = 9000' >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.remote_handler=dbgp' >> XDEBUG_CONFIG_FILEPATH
+echo 'xdebug.remote_host=10.0.2.2' >> XDEBUG_CONFIG_FILEPATH
+
 service apache2 restart
 
 # Solve the error "configure: error: sasl.h not found!"
@@ -43,13 +64,13 @@ pecl install mongo > /dev/null 2>&1
 
 updatedb
 
-MONGO_LOCATION="$(locate mongo.so)"
+MONGO_EXTENSION_FILEPATH="$(locate mongo.so)"
 
-echo  "extension=${MONGO_LOCATION}" >> /etc/php5/apache2/php.ini
-echo  "extension=${MONGO_LOCATION}" >> /etc/php5/cli/php.ini
+echo  "extension=${MONGO_EXTENSION_FILEPATH}" >> /etc/php5/apache2/php.ini
+echo  "extension=${MONGO_EXTENSION_FILEPATH}" >> /etc/php5/cli/php.ini
+
+# Check http://docs.mongodb.org/ecosystem/drivers/php/
 
 # /usr/bin/mysqladmin -u root password 'new-password'
 # CREATE USER 'jcchavezs'@'localhost' IDENTIFIED BY 'mypass';
 # GRANT ALL PRIVILEGES ON * . * TO 'jcchavezs'@'localhost';
-
-# Check http://docs.mongodb.org/ecosystem/drivers/php/
