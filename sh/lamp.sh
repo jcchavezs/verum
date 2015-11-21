@@ -20,7 +20,7 @@ apt-get install -f
 #mysql_secure_installation
 
 apt-get install -y php5 libapache2-mod-php5 php5-mcrypt
-apt-get install -y php5-dev php5-cli php-pear
+apt-get install -y php5-dev php5-cli php-pear php5-curl
 
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
