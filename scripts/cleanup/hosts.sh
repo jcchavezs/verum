@@ -1,0 +1,1 @@
+cp /etc/hosts /var/backups/hosts

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source /vagrant/variables.sh
+
 if [ -e "/etc/vagrant-provisioned" ];
 then
     echo "Vagrant provisioning already completed. Skipping..."
@@ -9,35 +11,35 @@ else
 fi
 
 # Change the hostname so we can easily identify what environment we're on:
-echo "verum-vagrant" > /etc/hostname
+echo "verum" > /etc/hostname
 # Update /etc/hosts to match new hostname to avoid "Unable to resolve hostname" issue:
-echo "127.0.0.1 verum-vagrant" >> /etc/hosts
+echo "127.0.0.1 verum" >> /etc/hosts
 # Use hostname command so that the new hostname takes effect immediately without a restart:
-hostname verum-vagrant
+hostname verum
 
 # Install core components
-/vagrant/sh/core.sh
+source /vagrant/scripts/provision/core.sh
 
 # Install Node.js
-/vagrant/sh/nodejs.sh
+source /vagrant/scripts/provision/nodejs.sh
 
 # Install MongoDB
-/vagrant/sh/mongodb.sh
+source /vagrant/scripts/provision/mongodb.sh
 
 # Install Redis
-/vagrant/sh/redis.sh
+source /vagrant/scripts/provision/redis.sh
 
 # Travis-CI toolbelt:
-/vagrant/sh/travis.sh
+source /vagrant/scripts/provision/travis.sh
 
 # Heroku toolbelt (NOTE: after Travis-CI due to Ruby removal/reinstall):
-/vagrant/sh/heroku.sh
+source /vagrant/scripts/provision/heroku.sh
 
 # Vim settings:
-/vagrant/sh/vim.sh
+source /vagrant/scripts/provision/vim.sh
 
 # Install Apache2, MySQL and PHP5:
-/vagrant/sh/lamp.sh
+source /vagrant/scripts/provision/lamp.sh
 
 touch /etc/vagrant-provisioned
 

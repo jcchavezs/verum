@@ -13,6 +13,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../www/logs", "/var/www/logs", type: "nfs", create: true
   config.vm.synced_folder "../www/htdocs", "/var/www/htdocs", type: "nfs", create: true
   config.vm.synced_folder "../www/vhosts", "/var/www/vhosts", type: "nfs", create: true
+  config.vm.synced_folder "../backups", "/var/backups", type: "nfs", create: true
 
   # VM
   config.vm.provider :virtualbox do |vb|
@@ -22,5 +23,22 @@ Vagrant.configure(2) do |config|
   end
 
   # Configuration
-  config.vm.provision :shell, :path => "sh/provision.sh"
+  config.vm.provision :shell, :path => "scripts/provision.sh"
+
+  # run some script before the guest is destroyed
+  config.trigger.before :destroy do
+    info "Dumping the database and the hosts"
+    run_remote  "bash /vagrant/scripts/cleanup.sh"
+  end
+
+  # clean up files on the host after the guest is destroyed
+  config.trigger.after :destroy do
+    run "rm -Rf tmp/*"
+  end
+
+  # start apache on the guest after the guest starts
+  config.trigger.after :up do
+    run_remote "service apache2 start"
+  end
+
 end
