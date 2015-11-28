@@ -8,8 +8,8 @@ echo "ServerName 192.168.33.11" >> /etc/apache2/apache2.conf
 echo "IncludeOptional /var/www/vhosts/*.conf" >> /etc/apache2/apache2.conf
 
 # Install MySQL
-debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASSWORD"
-debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASSWORD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_ROOT_PASSWORD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_ROOT_PASSWORD"
 
 apt-get install -y mysql-server php5-mysql
 apt-get install -f
@@ -69,8 +69,8 @@ echo  "extension=${MONGO_EXTENSION_FILEPATH}" >> /etc/php5/cli/php.ini
 
 # Check http://docs.mongodb.org/ecosystem/drivers/php/
 
-mysql -u root -p$DB_ROOT_PASSWORD < /var/backups/mysqldump.sql
+mysql -u root -p$MYSQL_ROOT_PASSWORD < /var/backups/mysqldump.sql
 
-# /usr/bin/mysqladmin -u root -p${DB_ROOT_PASSWORD} password 'new-password'
+# /usr/bin/mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} password 'new-password'
 # CREATE USER 'youruser'@'localhost' IDENTIFIED BY 'mypass';
 # GRANT ALL PRIVILEGES ON * . * TO 'youruser'@'localhost';

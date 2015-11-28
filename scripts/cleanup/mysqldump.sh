@@ -13,10 +13,10 @@ SQLSTMT="SELECT schema_name FROM information_schema.schemata WHERE schema_name N
 
 MYSQLDUMP_DATABASES="--databases"
 
-for DB in `mysql -u root -p"${DB_ROOT_PASSWORD}" -ANe"${SQLSTMT}"`
+for DB in `mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -ANe"${SQLSTMT}"`
 do
     MYSQLDUMP_DATABASES="${MYSQLDUMP_DATABASES} ${DB}"
 done
 
 MYSQLDUMP_OPTIONS="--routines --triggers"
-mysqldump -u root -p${DB_ROOT_PASSWORD} ${MYSQLDUMP_OPTIONS} ${MYSQLDUMP_DATABASES} > /var/backups/mysqldump.sql
+mysqldump -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQLDUMP_OPTIONS} ${MYSQLDUMP_DATABASES} > /var/backups/mysqldump.sql
