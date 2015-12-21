@@ -13,6 +13,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../www/logs", "/var/www/logs", type: "nfs", create: true
   config.vm.synced_folder "../www/htdocs", "/var/www/htdocs", type: "nfs", create: true
   config.vm.synced_folder "../www/vhosts", "/var/www/vhosts", type: "nfs", create: true
+  config.vm.synced_folder "../www/components", "/var/www/components", type: "nfs", create: true
   config.vm.synced_folder "../backups", "/var/backups", type: "nfs", create: true
 
   # VM
