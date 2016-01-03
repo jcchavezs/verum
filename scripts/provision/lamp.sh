@@ -27,6 +27,10 @@ export LC_ALL=en_US.UTF-8
 locale-gen en_US.UTF-8
 dpkg-reconfigure locales
 
+# Install GD
+
+apt-get install php5-gd
+
 # Install composer globally
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
